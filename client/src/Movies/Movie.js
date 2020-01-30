@@ -2,9 +2,12 @@ import React from "react";
 import axios from "axios";
 import MovieCard from "./MovieCard";
 export default class Movie extends React.Component {
-    state = {
+  constructor(props){
+    super(props)
+    this.state = {
       movie: null
     };
+  }
 
   componentDidMount() {
     this.fetchMovie(this.props.match.params.id);
@@ -28,7 +31,8 @@ export default class Movie extends React.Component {
     addToSavedList(this.state.movie);
   };
 
-  editMovie = () => {
+  editMovie = (e) => {
+    e.preventDefault();
     this.props.history.push(`http://localhost:5000/api/update-movie/${this.state.movie.id}`)
   }
 
@@ -45,13 +49,14 @@ export default class Movie extends React.Component {
     }
 
     return (
-      <div className="save-wrapper">
-        <MovieCard movie={this.state.movie} />
-        <div className="save-button"> 
-        <button onClick={this.saveMovie}>Save</button>
-        <button onClick={this.editMovie}>Edit</button>
-        <button onClick={this.deleteMovie}>Delete</button>
+      <div>
+
+        <div className="save-wrapper">
+          <MovieCard movie={this.state.movie} />
+          <div className="save-button" onClick={this.saveMovie}>Save</div>
         </div>
+          <button onClick={this.editMovie}>Edit</button>
+          <button onClick={this.deleteMovie}>Delete</button>
       </div>
     );
   }

@@ -11,7 +11,7 @@ function UpdateMovie(props){
         stars: []
     })
 
-    const {id} = 
+    const {id} = useParams()
 
     useEffect(() => {
         axios.get(`http://localhost:5000/api/movies/${id}`)
@@ -19,21 +19,33 @@ function UpdateMovie(props){
             console.log(res)
             setMovie(res.data)
         })
-    }, [])
+    }, [movie, id])
 
     const handleChange = e => {
         this.setState({ [e.target.name]: e.target.value })
     }
-        return(
-            <div>
-                <input type="text" name="title"  value={movie.title}/>
-                <input type="text" name="director" value={movie.director} />
-                <input type="number" name="metascore" value={movie.metaScore} />
-                <input type="text" name="actor" value={movie.actor} />
-                <input type="text" name="stars" value={movie.stars}/>
+
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        axios.put(`http://localhost:5000/api/movies/${id}`, movie)
+        .then( res => {
+            props.history.push(`http://localhost:5000/api/movies/${id}`)
+        })
+    }
+    
+
+    return(
+        <div>
+            <form onSubmit={handleSubmit}>
+                <input type="text" placeholder="title" name="title"  value={movie.title} onChange={handleChange}/>
+                <input type="text" placeholder="director" name="director" value={movie.director} onChange={handleChange}/>
+                <input type="number" placeholder="metascore" name="metascore" value={movie.metaScore} onChange={handleChange} />
+                <input type="text" placeholder="actor" name="actor" value={movie.actor} onChange={handleChange}/>
                 <button>Update Movie</button>
-            </div>
-        )
+            </form>
+        </div>
+    )
 }
 
 export default UpdateMovie

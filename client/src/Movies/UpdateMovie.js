@@ -9,27 +9,32 @@ function UpdateMovie(props){
         metaScore: 0,
         actor: '',
         stars: [],
-        id: props.match.params.id
     })
 
+    const { id } = useParams()
+
+    console.log(props.items)
+
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/movies/${props.match.params.id}`)
+        axios.get(`http://localhost:5000/api/movies/${id}`)
         .then(res => {
             console.log(res)
-            setMovie(res.data)
+            const movieToUpdate = res.data
+            if(movieToUpdate){
+                setMovie(res.data)
+            }
         })
-    }, [movie])
+    }, [props.id])
 
     const handleChange = e => {
-        this.setState({ [e.target.name]: e.target.value })
+        this.setState({[e.target.name]: e.target.value })
     }
 
     const handleSubmit = e => {
         e.preventDefault();
-
-        axios.put(`http://localhost:5000/api/movies/${movie.id}`, movie)
+        axios.put(`http://localhost:5000/api/movies/${id}`, movie)
         .then( res => {
-            props.history.push(`http://localhost:5000/api/movies/${movie.id}`)
+            props.history.push(`http://localhost:5000/api/movies/${id}`)
         })
     }
     
